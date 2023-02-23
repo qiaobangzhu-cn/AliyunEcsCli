@@ -1,0 +1,1570 @@
+待完成：
+
+9.将实例加入到安全组    目前实例已经在这个安全组中，所以返回错误信息
+python ecs.py JoinSecurityGroup --InstanceId=i-94hozftgh --SecurityGroupId=sg-943xzoezj
+
+10.将实例移出安全组
+python ecs.py LeaveSecurityGroup --InstanceId=i-94hozftgh --SecurityGroupId=sg-943xzoezj
+--------
+
+7 重新初始化磁盘
+python ecs.py ReInitDisk --DiskId=d-28cuf5kbp
+
+8 回滚磁盘
+python ecs.py ResetDisk --DiskId=d-28cuf5kbp --SnapshotId=s-280gvvevk
+
+9 更换系统盘
+python ecs.py ReplaceSystemDisk
+---------
+2 创建自定义镜像
+python ecs.py CreateImage --RegionId=cn-qingdao --SnapshotId=s-280gvvevk
+不是系统盘无法创建
+
+
+3 删除自定义镜像
+python ecs.py DeleteImage
+
+-----------
+1 创建安全组
+python ecs.py CreateSecurityGroup --RegionId=cn-shenzhen --Description=This is TEST_API
+
+2 授权安全组权限
+python ecs.py AuthorizeSecurityGroup
+======================================================
+
+初次使用：
+1.保存帐号信息：初次使用会自动配置config
+python ecs.py config --id=eelu3o4e2qff9t8lp8abdmuf --key=dmmycpmPw81PVszMFsROFM60IfA= --output=json
+
+python ecs.py config --id=eelu3o4e2qff9t8lp8abdmuf --key=dmmycpmPw81PVszMFsROFM60IfA= --AliasName=defff --output=json --outputfile=C:\Users\vincent\Desktop\ABC\response.txt --logfile==C:\Users\vincent\Desktop\ABC\ecs.log
+
+python ecs.py config --id=eelu3o4e2qff9t8lp8abdmuf --key=dmmycpmPw81PVszMFsROFM60IfA= --output=json --outputfile=C:\Users\vincent\Desktop\ABC\response.txt --logfile==C:\Users\vincent\Desktop\ABC\ecs.log
+
+python ecs.py config --id=eelu3o4e2qff9t8lp8abdmuf --key=dmmycpmPw81PVszMFsROFM60IfA= --AliasName=defff --output=json --outputfile=C:\Users\vincent\Desktop\ABC1\response.txt --logfile==C:\Users\vincent\Desktop\ABC1\ecs.log
+
+
+
+1.查询可用的 Region 列表,即地域信息
+
+python ecs.py DescribeRegions
+
+{"Regions":{"Region":[{"LocalName":"深圳","RegionId":"cn-shenzhen"},{"LocalName":"青岛","RegionId":"cn-qingdao"},{"LocalName":"北京","RegionId":"cn-beijing"},{"LocalName":"香港","RegionId":"cn-hongkong"},{"LocalName":"杭州","RegionId":"cn-hangzhou"}]},"RequestId":"72D63360-1977-4225-B96A-6A306A88284E"}
+
+
+2.查询指定Region下的Zone列表：
+
+python ecs.py DescribeZones --RegionId=cn-shenzhen
+
+{"Zones":{"Zone":[{"AvailableResourceCreation":{"ResourceTypes":["Instance","Disk"]},"LocalName":"深圳可用区A","ZoneId":"cn-shenzhen-a","AvailableDiskCategories":{"DiskCategories":["cloud"]}}]},"RequestId":"124B5A33-EF2B-431B-885C-45BA9D708A1C"}
+
+python ecs.py DescribeZones --RegionId=cn-qingdao
+{
+  "RequestId": "80850E3E-9DDF-4AF6-AECE-F941548223D9", 
+  "Zones": {
+    "Zone": [
+      {
+        "AvailableDiskCategories": {
+          "DiskCategories": [
+            "ephemeral", 
+            "cloud"
+          ]
+        }, 
+        "AvailableResourceCreation": {
+          "ResourceTypes": [
+            "Instance", 
+            "Disk"
+          ]
+        }, 
+        "LocalName": "青岛可用区B", 
+        "ZoneId": "cn-qingdao-b"
+      }
+    ]
+  }
+}
+
+
+3.查询可用镜像：
+python ecs.py DescribeImages --RegionId=cn-shenzhen
+
+{"Images":{"Image":[{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:39:09Z","ImageOwnerAlias":"system","Size":20,"ImageName":"centos5u10_32_20G_aliaegis_20140811.vhd","Architecture":"i386","OSName":"CentOS  5.10 32位","ProductCode":"","Description":"","ImageId":"centos5u10_32_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:38:45Z","ImageOwnerAlias":"system","Size":20,"ImageName":"centos5u10_64_20G_aliaegis_20140811.vhd","Architecture":"x86_64","OSName":"CentOS  5.10 64位","ProductCode":"","Description":"","ImageId":"centos5u10_64_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:38:33Z","ImageOwnerAlias":"system","Size":20,"ImageName":"centos6u3_64_20G_aliaegis_20130816.vhd","Architecture":"x86_64","OSName":"CentOS  6.3 64位","ProductCode":"","Description":"","ImageId":"centos6u3_64_20G_aliaegis_20130816.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:38:06Z","ImageOwnerAlias":"system","Size":20,"ImageName":"centos6u5_32_20G_aliaegis_20140811.vhd","Architecture":"i386","OSName":"CentOS  6.5 32位","ProductCode":"","Description":"","ImageId":"centos6u5_32_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:37:53Z","ImageOwnerAlias":"system","Size":20,"ImageName":"centos6u5_64_20G_aliaegis_20140811.vhd","Architecture":"x86_64","OSName":"CentOS  6.5 64位","ProductCode":"","Description":"","ImageId":"centos6u5_64_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:37:35Z","ImageOwnerAlias":"system","Size":20,"ImageName":"debian609_32_20G_aliaegis_20140811.vhd","Architecture":"i386","OSName":"Debian  6.0.9 32位","ProductCode":"","Description":"","ImageId":"debian609_32_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:37:15Z","ImageOwnerAlias":"system","Size":20,"ImageName":"debian609_64_20G_aliaegis_20140811.vhd","Architecture":"x86_64","OSName":"Debian  6.0.9 64位","ProductCode":"","Description":"","ImageId":"debian609_64_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:35:42Z","ImageOwnerAlias":"system","Size":20,"ImageName":"debian750_32_20G_aliaegis_20140811.vhd","Architecture":"i386","OSName":"Debian  7.5.0 32位","ProductCode":"","Description":"","ImageId":"debian750_32_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:35:25Z","ImageOwnerAlias":"system","Size":20,"ImageName":"debian750_64_20G_aliaegis_20140811.vhd","Architecture":"x86_64","OSName":"Debian  7.5.0 64位","ProductCode":"","Description":"","ImageId":"debian750_64_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"},{"Description":"","DiskDeviceMappings":{"DiskDeviceMapping":[{"Device":"\/dev\/xvda","Size":"20","SnapshotId":""}]},"CreationTime":"2014-08-26T09:35:00Z","ImageOwnerAlias":"system","Size":20,"ImageName":"opensuse1301_32_20G_aliaegis_20140811.vhd","Architecture":"i386","OSName":"OpenSUSE  13.1 32位","ProductCode":"","Description":"","ImageId":"opensuse1301_32_20G_aliaegis_20140811.vhd","IsSubscribed":false,"ImageVersion":"1.0"}]},"PageNumber":1,"PageSize":10,"RegionId":"cn-shenzhen","TotalCount":23,"RequestId":"D2EC3571-FD53-4664-89B4-D85736006B8D"}
+
+
+python ecs.py DescribeImages --RegionId=cn-qingdao
+{
+  "Images": {
+    "Image": [
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-09-04T10:28:20Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-281b5utx2"
+            }
+          ]
+        }, 
+        "ImageId": "m-287780z6k", 
+        "ImageName": "释放vm不会删除", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-15T05:22:07Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-283kj6s7z"
+            }
+          ]
+        }, 
+        "ImageId": "m-28oqct4a7", 
+        "ImageName": "iegllgllij", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-13T05:49:21Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-28k5n83s2"
+            }
+          ]
+        }, 
+        "ImageId": "m-28ld0qz7w", 
+        "ImageName": "geilagoe", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-13T03:34:23Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "40", 
+              "SnapshotId": "s-28kcbzd6c"
+            }
+          ]
+        }, 
+        "ImageId": "m-28g5bm5c1", 
+        "ImageName": "ilnjlnlnl", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Windows Server  2008 R2 标准版 SP1 64位中文版", 
+        "ProductCode": "jxsc000003", 
+        "Size": 40
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-08T06:29:14Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-28b0k7ndd"
+            }
+          ]
+        }, 
+        "ImageId": "m-28v5jazkj", 
+        "ImageName": "kailintest", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "i386", 
+        "CreationTime": "2014-07-22T11:38:53Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  6.0.9 32位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-07-22T11:38:36Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian609_64_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian609_64_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  6.0.9 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "i386", 
+        "CreationTime": "2014-07-22T11:38:20Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian750_32_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian750_32_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  7.5.0 32位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-07-22T11:37:52Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian750_64_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian750_64_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  7.5.0 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "i386", 
+        "CreationTime": "2014-07-22T11:37:08Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "centos6u5_32_20G_aliaegis_20140703.vhd", 
+        "ImageName": "centos6u5_32_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "CentOS  6.5 32位", 
+        "ProductCode": "", 
+        "Size": 20
+      }
+    ]
+  }, 
+  "PageNumber": 1, 
+  "PageSize": 10, 
+  "RegionId": "cn-qingdao", 
+  "RequestId": "D0133B62-73C2-4ED9-8CE3-EBF80C3DABF5", 
+  "TotalCount": 47
+}
+
+
+4.查询安全组规则：
+python ecs.py DescribeSecurityGroupAttribute --SecurityGroupId=sg-943xzoezj --RegionId=cn-shenzhen
+
+{"Description":"auto create.","SecurityGroupName":"sg-943xzoezj","SecurityGroupId":"sg-943xzoezj","Permissions":{"Permission":[{"IpProtocol":"ALL","NicType":"internet","Policy":"Accept","PortRange":"-1\/-1","SourceCidrIp":"0.0.0.0\/0","SourceGroupId":""}]},"RegionId":"cn-shenzhen","VpcId":"","RequestId":"67D5202A-C85D-49CB-A6C6-8F766469D8E0"}
+
+
+
+5.查询安全组列表：
+python ecs.py DescribeSecurityGroups --RegionId=cn-shenzhen
+
+{"SecurityGroups":{"SecurityGroup":[{"CreationTime":"2014-08-28T12:31:46Z","Description":"auto create.","SecurityGroupName":"sg-943xzoezj","SecurityGroupId":"sg-943xzoezj","VpcId":""}]},"PageNumber":1,"PageSize":10,"RegionId":"cn-shenzhen","TotalCount":1,"RequestId":"EB97EE84-097A-42EB-8317-DACE07E1701D"}
+
+
+--------------------------------------------
+
+1.创建云主机实例：
+python ecs.py CreateInstance --RegionId=cn-shenzhen --ImageId=centos5u10_32_20G_aliaegis_20140811.vhd --InstanceType=ecs.t1.small --SecurityGroupId=sg-943xzoezj --HostName=apiCreate --Password=123456
+
+{"InstanceId":"i-94hozftgh","RequestId":"1C43F391-DA3E-4BDF-8477-EE505295B3A4"}
+
+python ecs.py CreateInstance --RegionId=cn-qingdao --ImageId=m-287780z6k --InstanceType=ecs.t1.small --SecurityGroupId=sg-283bb0e2w --HostName=apiCreate --Password=123456
+
+{
+  "InstanceId": "i-28mwdh7kl",
+  "RequestId": "1D70193A-E89B-487C-884E-D831AF2F5AF6"
+}
+
+
+
+2.启动实例：
+python ecs.py StartInstance --InstanceId=i-94hozftgh
+
+{"RequestId":"E1C45233-FECF-4B59-B06C-8B337BE7F882"}
+
+
+3.停止实例
+
+python ecs.py StopInstance --InstanceId=i-94hozftgh --ForceStop=false
+
+注：ForceStop为非必须参数---表示是否强制开关机
+{
+  "RequestId": "D2050DB7-1725-42CA-859E-D49E36D4B2E3"
+}
+
+
+4.重启实例：
+python ecs.py RebootInstance --InstanceId=i-94hozftgh
+
+{"RequestId":"321F2540-E617-4047-9E44-C8AA3B4E1D7F"}
+
+
+
+5.修改实例属性--修改密码
+python ecs.py ModifyInstanceAttribute --InstanceId=i-94hozftgh --Password=66666666
+
+{"RequestId":"E26AF2AD-441C-4513-B1F2-7DAD9216689A"}
+
+
+
+6.查询实例状态(查询实例列表)：
+python ecs.py DescribeInstanceStatus --RegionId=cn-shenzhen
+
+{"InstanceStatuses":{"InstanceStatus":[{"InstanceId":"i-94hozftgh","Status":"Running"}]},"PageNumber":1,"PageSize":10,"TotalCount":1,"RequestId":"F24CD054-DD83-4DBF-8B6F-4B816D973FC4"}
+
+
+
+
+7.查询实例信息（包含实例所属安全组）：
+
+python ecs.py DescribeInstanceAttribute --InstanceId=i-94hozftgh
+
+{"CreationTime":"2014-09-05T14:11:41Z","Description":"","EipAddress":{"AllocationId":"","IpAddress":"","InternetChargeType":""},"HostName":"apiCreate","ImageId":"centos5u10_32_20G_aliaegis_20140811.vhd","InnerIpAddress":{"IpAddress":["10.169.100.146"]},"InstanceId":"i-94hozftgh","InstanceName":"apiCreate","InstanceNetworkType":"classic","InstanceType":"ecs.t1.small","InternetChargeType":"PayByBandwidth","InternetMaxBandwidthIn":200,"InternetMaxBandwidthOut":0,"ZoneId":"cn-shenzhen-a","OperationLocks":{"LockReason":[]},"PublicIpAddress":{"IpAddress":[]},"RegionId":"cn-shenzhen","SecurityGroupIds":{"SecurityGroupId":["sg-943xzoezj"]},"SerialNumber":"68aec0cc-89ce-4147-8ad8-2a052fdf6729","Status":"Running","VlanId":"","VpcAttributes":{"NatIpAddress":"","PrivateIpAddress":{"IpAddress":[]},"VSwitchId":"","VpcId":""},"ClusterId":"","RequestId":"4FE7AEE1-1AFC-48DD-9DA2-567A75580E82"}
+
+python ecs.py DescribeInstanceAttribute --InstanceId=i-28mwdh7kl
+{
+  "ClusterId": "", 
+  "CreationTime": "2014-09-07T04:39:51Z", 
+  "Description": "", 
+  "EipAddress": {
+    "AllocationId": "", 
+    "InternetChargeType": "", 
+    "IpAddress": ""
+  }, 
+  "HostName": "apiCreate", 
+  "ImageId": "m-287780z6k", 
+  "InnerIpAddress": {
+    "IpAddress": [
+      "10.164.21.23"
+    ]
+  }, 
+  "InstanceId": "i-28mwdh7kl", 
+  "InstanceName": "apiCreate", 
+  "InstanceNetworkType": "classic", 
+  "InstanceType": "ecs.t1.small", 
+  "InternetChargeType": "PayByBandwidth", 
+  "InternetMaxBandwidthIn": 200, 
+  "InternetMaxBandwidthOut": 0, 
+  "OperationLocks": {
+    "LockReason": []
+  }, 
+  "PublicIpAddress": {
+    "IpAddress": []
+  }, 
+  "RegionId": "cn-qingdao", 
+  "RequestId": "A9719891-BF6D-4C8A-AF4C-854D5C9548A3", 
+  "SecurityGroupIds": {
+    "SecurityGroupId": [
+      "sg-283bb0e2w"
+    ]
+  }, 
+  "SerialNumber": "715697a6-9142-4760-906c-01ec81ef2aaa", 
+  "Status": "Stopped", 
+  "VlanId": "", 
+  "VpcAttributes": {
+    "NatIpAddress": "", 
+    "PrivateIpAddress": {
+      "IpAddress": []
+    }, 
+    "VSwitchId": "", 
+    "VpcId": ""
+  }, 
+  "ZoneId": "cn-qingdao-b"
+}
+
+
+
+
+8.删除实例------最后再删除  实例状态为 stopped状态才能够删除
+python ecs.py DeleteInstance --InstanceId=i-94hozftgh
+{
+  "RequestId": "A4CAF241-134A-47FE-BD23-E49D8ADFD9EC"
+}
+
+
+
+====================================
+
+
+9.将实例加入到安全组    目前实例已经在这个安全组中，所以返回错误信息
+
+python ecs.py JoinSecurityGroup --InstanceId=i-94hozftgh --SecurityGroupId=sg-943xzoezj
+
+
+
+
+10.将实例移出安全组
+
+python ecs.py LeaveSecurityGroup --InstanceId=i-94hozftgh --SecurityGroupId=sg-943xzoezj
+
+
+
+
+
+磁盘接口相关
++++++++++++++++
+
+1.创建磁盘
+python ecs.py CreateDisk --RegionId=cn-qingdao --ZoneId=cn-qingdao-b --Size=10
+
+{
+  "DiskId": "d-288ldh8q1",
+  "RequestId": "728F4B6C-833D-4F40-AA20-3DBD84386675"
+}
+
+python ecs.py CreateDisk --RegionId=cn-qingdao --ZoneId=cn-qingdao-b --SnapshotId=s-280gvvevk
+{
+  "DiskId": "d-28cuf5kbp",
+  "RequestId": "8E003D5D-41E8-4B7F-BCC8-61877B152B53"
+}
+
+
+2.查询磁盘
+
+python ecs.py DescribeDisks --RegionId=cn-qingdao
+{
+  "Disks": {
+    "Disk": [
+      {
+        "AttachedTime": "", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-07T07:06:07Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": false, 
+        "Description": "", 
+        "DetachedTime": "", 
+        "Device": "", 
+        "DiskId": "d-288ldh8q1", 
+        "DiskName": "", 
+        "ImageId": "", 
+        "InstanceId": "", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": true, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 10, 
+        "SourceSnapshotId": "", 
+        "Status": "Available", 
+        "Type": "data", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-07T04:39:52Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-07T04:39:52Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": true, 
+        "Description": "", 
+        "DetachedTime": "", 
+        "Device": "/dev/xvda", 
+        "DiskId": "d-28ljhbw0n", 
+        "DiskName": "", 
+        "ImageId": "m-287780z6k", 
+        "InstanceId": "i-28mwdh7kl", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": false, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 20, 
+        "SourceSnapshotId": "", 
+        "Status": "In_use", 
+        "Type": "system", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-05T03:44:53Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-05T03:44:38Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": false, 
+        "Description": "", 
+        "DetachedTime": "2014-09-05T03:45:22Z", 
+        "Device": "", 
+        "DiskId": "d-28606g7vx", 
+        "DiskName": "", 
+        "ImageId": "", 
+        "InstanceId": "", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": true, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 500, 
+        "SourceSnapshotId": "", 
+        "Status": "Available", 
+        "Type": "data", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-05T03:12:10Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-05T03:12:07Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": true, 
+        "Description": "", 
+        "DetachedTime": "", 
+        "Device": "/dev/xvda", 
+        "DiskId": "d-28x6shr1l", 
+        "DiskName": "", 
+        "ImageId": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "InstanceId": "i-289kmpfvr", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": false, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 20, 
+        "SourceSnapshotId": "", 
+        "Status": "In_use", 
+        "Type": "system", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-05T02:43:10Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-05T02:43:02Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": true, 
+        "Description": "", 
+        "DetachedTime": "", 
+        "Device": "/dev/xvda", 
+        "DiskId": "d-28glx949s", 
+        "DiskName": "", 
+        "ImageId": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "InstanceId": "i-28uer5azp", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": false, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 20, 
+        "SourceSnapshotId": "", 
+        "Status": "In_use", 
+        "Type": "system", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-05T06:53:27Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-04T16:25:59Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": false, 
+        "Description": "", 
+        "DetachedTime": "2014-09-05T06:54:08Z", 
+        "Device": "", 
+        "DiskId": "d-28rnx67rx", 
+        "DiskName": "", 
+        "ImageId": "", 
+        "InstanceId": "", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": true, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 10, 
+        "SourceSnapshotId": "", 
+        "Status": "Available", 
+        "Type": "data", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-04T15:14:19Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-04T15:14:13Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": true, 
+        "Description": "egqae", 
+        "DetachedTime": "", 
+        "Device": "/dev/xvda", 
+        "DiskId": "d-28yslzfww", 
+        "DiskName": "kljolje4e4g", 
+        "ImageId": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "InstanceId": "i-287m7vby1", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": false, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 20, 
+        "SourceSnapshotId": "", 
+        "Status": "In_use", 
+        "Type": "system", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-05T03:43:23Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-04T13:47:54Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": false, 
+        "Description": "", 
+        "DetachedTime": "2014-09-05T03:43:44Z", 
+        "Device": "", 
+        "DiskId": "d-280qqjutp", 
+        "DiskName": "egewag", 
+        "ImageId": "", 
+        "InstanceId": "", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": true, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 5, 
+        "SourceSnapshotId": "", 
+        "Status": "Available", 
+        "Type": "data", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-03T10:12:39Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-09-03T10:12:39Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": true, 
+        "Description": "sfsffs", 
+        "DetachedTime": "", 
+        "Device": "/dev/xvda", 
+        "DiskId": "d-28kykzkts", 
+        "DiskName": "a.bc-b", 
+        "ImageId": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "InstanceId": "i-283992jw1", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": false, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 20, 
+        "SourceSnapshotId": "", 
+        "Status": "In_use", 
+        "Type": "system", 
+        "ZoneId": "cn-qingdao-b"
+      }, 
+      {
+        "AttachedTime": "2014-09-03T15:38:00Z", 
+        "Category": "cloud", 
+        "CreationTime": "2014-08-14T03:03:11Z", 
+        "DeleteAutoSnapshot": true, 
+        "DeleteWithInstance": false, 
+        "Description": "234", 
+        "DetachedTime": "2014-09-04T13:33:38Z", 
+        "Device": "", 
+        "DiskId": "d-28vmphgqe", 
+        "DiskName": "d1234", 
+        "ImageId": "", 
+        "InstanceId": "", 
+        "OperationLocks": {
+          "OperationLock": []
+        }, 
+        "Portable": true, 
+        "ProductCode": "", 
+        "RegionId": "cn-qingdao", 
+        "Size": 5, 
+        "SourceSnapshotId": "s-28d1nlt45", 
+        "Status": "Available", 
+        "Type": "data", 
+        "ZoneId": "cn-qingdao-b"
+      }
+    ]
+  }, 
+  "PageNumber": 1, 
+  "PageSize": 10, 
+  "RequestId": "3FD2EA5C-AFAA-4BE3-A44E-AC05A3C52E42", 
+  "TotalCount": 17
+}
+
+
+
+
+
+3 挂载磁盘
+
+python ecs.py AttachDisk --InstanceId=i-28mwdh7kl --DiskId=d-288ldh8q1
+
+{
+  "RequestId": "F4DBABC2-3EEA-4D73-9F89-43C7CC261A01"
+}
+
+
+4 卸载磁盘
+
+python ecs.py DetachDisk --InstanceId=i-28mwdh7kl --DiskId=d-288ldh8q1
+{
+  "RequestId": "FB451835-567D-4447-9CF7-C8B7899EC854"
+}
+
+
+
+5 修改磁盘属性
+
+python ecs.py ModifyDiskAttribute --DiskId=d-288ldh8q1 --DiskName=HaHa
+{
+  "RequestId": "923DEC9F-252D-4022-B830-DFF37456C1E7"
+}
+
+
+6 删除磁盘
+python ecs.py DeleteDisk --DiskId=d-288ldh8q1
+{
+  "RequestId": "B10A3D81-923A-41BA-B86F-A5D4C3AF5F75"
+}
+
+
+
+
+
+
+7 重新初始化磁盘
+python ecs.py ReInitDisk --DiskId=d-28cuf5kbp
+
+
+8 回滚磁盘
+python ecs.py ResetDisk --DiskId=d-28cuf5kbp --SnapshotId=s-280gvvevk
+
+
+
+9 更换系统盘
+python ecs.py ReplaceSystemDisk
+
+
+
+
+
+
+
+快照相关接口
++++++++++++++++++++
+
+1 创建快照
+python ecs.py CreateSnapshot --DiskId=d-288ldh8q1
+{
+  "RequestId": "55DAA593-2011-44F4-8F32-356244AB6F8F",
+  "SnapshotId": "s-280gvvevk"
+}
+
+python ecs.py CreateSnapshot --DiskId=d-28cuf5kbp
+
+2 删除快照  已被用来创建磁盘的快照暂时无法删除
+python ecs.py DeleteSnapshot --SnapshotId=s-280gvvevk
+
+
+
+3 查询快照列表
+python ecs.py DescribeSnapshots --RegionId=cn-qingdao
+{
+  "PageNumber": 1, 
+  "PageSize": 10, 
+  "RequestId": "C1B5B3ED-F623-4597-85CA-A4A26DE045A0", 
+  "Snapshots": {
+    "SnapshotResource": [
+      {
+        "CreationTime": "2014-09-07T07:28:22Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-280gvvevk", 
+        "SnapshotName": "", 
+        "SourceDiskId": "d-288ldh8q1", 
+        "SourceDiskSize": "10", 
+        "SourceDiskType": "data"
+      }, 
+      {
+        "CreationTime": "2014-09-07T05:00:11Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-28ohakzbi", 
+        "SnapshotName": "auto_20140907_3", 
+        "SourceDiskId": "d-28kykzkts", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-07T05:00:09Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-28ggj0qu4", 
+        "SnapshotName": "auto_20140907_3", 
+        "SourceDiskId": "d-28x6shr1l", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-07T05:00:09Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-28zhl7i4m", 
+        "SnapshotName": "auto_20140907_3", 
+        "SourceDiskId": "d-28yslzfww", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-07T05:00:07Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-2870w1xwr", 
+        "SnapshotName": "auto_20140907_3", 
+        "SourceDiskId": "d-28glx949s", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-06T05:00:09Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-28w9wwlhb", 
+        "SnapshotName": "auto_20140906_3", 
+        "SourceDiskId": "d-28glx949s", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-06T05:00:08Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-285mxuhvw", 
+        "SnapshotName": "auto_20140906_3", 
+        "SourceDiskId": "d-28yslzfww", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-06T05:00:08Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-28mia9hv9", 
+        "SnapshotName": "auto_20140906_3", 
+        "SourceDiskId": "d-28kykzkts", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-06T05:00:07Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-288f0mqhk", 
+        "SnapshotName": "auto_20140906_3", 
+        "SourceDiskId": "d-28x6shr1l", 
+        "SourceDiskSize": "20", 
+        "SourceDiskType": "system"
+      }, 
+      {
+        "CreationTime": "2014-09-05T03:45:15Z", 
+        "Description": "", 
+        "ProductCode": "", 
+        "Progress": "100%", 
+        "SnapshotId": "s-280jqdik6", 
+        "SnapshotName": "kkkkk", 
+        "SourceDiskId": "d-28606g7vx", 
+        "SourceDiskSize": "500", 
+        "SourceDiskType": "data"
+      }
+    ]
+  }, 
+  "TotalCount": 30
+}
+
+
+4 设置自动快照策略
+自动快照策略 保存一天
+python ecs.py ModifyAutoSnapshotPolicy --SystemDiskPolicyRetentionDays=1
+{
+  "RequestId": "D9638869-67BF-4795-9B27-7389126FEFC4"
+}
+
+
+5 查询自动快照策略?????
+
+python ecs.py DescribeAutoSnapshotPolicy
+{
+  "AutoSnapshotExcutionStatus": {
+    "DataDiskExcutionStatus": "Executed",
+    "SystemDiskExcutionStatus": "Executed"
+  },
+  "AutoSnapshotPolicy": {
+    "DataDiskPolicyEnabled": "true",
+    "DataDiskPolicyRetentionDays": "3",
+    "DataDiskPolicyRetentionLastWeek": "true",
+    "DataDiskPolicyTimePeriod": "2",
+    "SystemDiskPolicyEnabled": "true",
+    "SystemDiskPolicyRetentionDays": "1",
+    "SystemDiskPolicyRetentionLastWeek": "true",
+    "SystemDiskPolicyTimePeriod": "3"
+  },
+  "RequestId": ""
+}
+
+
+
+镜像相关接口
++++++++++++++++++++++++++++++++++++
+1 查询可用镜像
+python ecs.py DescribeImages --RegionId=cn-qingdao
+{
+  "Images": {
+    "Image": [
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-09-04T10:28:20Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-281b5utx2"
+            }
+          ]
+        }, 
+        "ImageId": "m-287780z6k", 
+        "ImageName": "释放vm不会删除", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-15T05:22:07Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-283kj6s7z"
+            }
+          ]
+        }, 
+        "ImageId": "m-28oqct4a7", 
+        "ImageName": "iegllgllij", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-13T05:49:21Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-28k5n83s2"
+            }
+          ]
+        }, 
+        "ImageId": "m-28ld0qz7w", 
+        "ImageName": "geilagoe", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-13T03:34:23Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "40", 
+              "SnapshotId": "s-28kcbzd6c"
+            }
+          ]
+        }, 
+        "ImageId": "m-28g5bm5c1", 
+        "ImageName": "ilnjlnlnl", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Windows Server  2008 R2 标准版 SP1 64位中文版", 
+        "ProductCode": "jxsc000003", 
+        "Size": 40
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-08-08T06:29:14Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": "s-28b0k7ndd"
+            }
+          ]
+        }, 
+        "ImageId": "m-28v5jazkj", 
+        "ImageName": "kailintest", 
+        "ImageOwnerAlias": "self", 
+        "ImageVersion": "", 
+        "IsSubscribed": false, 
+        "OSName": "Aliyun Linux  5.7 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "i386", 
+        "CreationTime": "2014-07-22T11:38:53Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian609_32_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  6.0.9 32位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-07-22T11:38:36Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian609_64_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian609_64_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  6.0.9 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "i386", 
+        "CreationTime": "2014-07-22T11:38:20Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian750_32_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian750_32_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  7.5.0 32位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "x86_64", 
+        "CreationTime": "2014-07-22T11:37:52Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "debian750_64_20G_aliaegis_20140703.vhd", 
+        "ImageName": "debian750_64_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "Debian  7.5.0 64位", 
+        "ProductCode": "", 
+        "Size": 20
+      }, 
+      {
+        "Architecture": "i386", 
+        "CreationTime": "2014-07-22T11:37:08Z", 
+        "Description": "", 
+        "DiskDeviceMappings": {
+          "DiskDeviceMapping": [
+            {
+              "Device": "/dev/xvda", 
+              "Size": "20", 
+              "SnapshotId": ""
+            }
+          ]
+        }, 
+        "ImageId": "centos6u5_32_20G_aliaegis_20140703.vhd", 
+        "ImageName": "centos6u5_32_20G_aliaegis_20140703.vhd", 
+        "ImageOwnerAlias": "system", 
+        "ImageVersion": "1.0", 
+        "IsSubscribed": false, 
+        "OSName": "CentOS  6.5 32位", 
+        "ProductCode": "", 
+        "Size": 20
+      }
+    ]
+  }, 
+  "PageNumber": 1, 
+  "PageSize": 10, 
+  "RegionId": "cn-qingdao", 
+  "RequestId": "B73D7886-D304-4091-9F46-2597F60C4B09", 
+  "TotalCount": 47
+}
+
+
+
+2 创建自定义镜像
+python ecs.py CreateImage --RegionId=cn-qingdao --SnapshotId=s-280gvvevk
+不是系统盘无法创建
+
+
+3 删除自定义镜像
+python ecs.py DeleteImage
+
+
+
+
+
+网络相关接口
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+1 分配公网IP 地址
+
+python ecs.py AllocatePublicIpAddress --InstanceId=i-28mwdh7kl
+
+{
+  "IpAddress": "114.215.158.225", 
+  "RequestId": "F373F0AF-E7CE-4D74-BC76-F098ED039864"
+}
+
+
+
+
+
+安全组相关接口
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+1 创建安全组
+python ecs.py CreateSecurityGroup --RegionId=cn-shenzhen --Description=This is TEST_API
+
+
+2 授权安全组权限
+python ecs.py AuthorizeSecurityGroup
+
+
+3 查询安全组规则
+python ecs.py DescribeSecurityGroupAttribute --SecurityGroupId=sg-943xzoezj --RegionId=cn-shenzhen
+
+{"Description":"auto create.","SecurityGroupName":"sg-943xzoezj","SecurityGroupId":"sg-943xzoezj","Permissions":{"Permission":[{"IpProtocol":"ALL","NicType":"internet","Policy":"Accept","PortRange":"-1\/-1","SourceCidrIp":"0.0.0.0\/0","SourceGroupId":""}]},"RegionId":"cn-shenzhen","VpcId":"","RequestId":"67D5202A-C85D-49CB-A6C6-8F766469D8E0"}
+
+
+4 查询安全组列表
+python ecs.py DescribeSecurityGroups --RegionId=cn-shenzhen
+
+{"SecurityGroups":{"SecurityGroup":[{"CreationTime":"2014-08-28T12:31:46Z","Description":"auto create.","SecurityGroupName":"sg-943xzoezj","SecurityGroupId":"sg-943xzoezj","VpcId":""}]},"PageNumber":1,"PageSize":10,"RegionId":"cn-shenzhen","TotalCount":1,"RequestId":"EB97EE84-097A-42EB-8317-DACE07E1701D"}
+
+python ecs.py DescribeSecurityGroups --RegionId=cn-qingdao
+
+{
+  "PageNumber": 1, 
+  "PageSize": 10, 
+  "RegionId": "cn-qingdao", 
+  "RequestId": "BFD2F18E-1670-44F8-ADC6-D1697BCB0C55", 
+  "SecurityGroups": {
+    "SecurityGroup": [
+      {
+        "CreationTime": "2014-08-27T12:08:20Z", 
+        "Description": "auto create.", 
+        "SecurityGroupId": "sg-283bb0e2w", 
+        "SecurityGroupName": "sg-283bb0e2w", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-08-18T07:19:29Z", 
+        "Description": "auto create.", 
+        "SecurityGroupId": "sg-28lzv8xbm", 
+        "SecurityGroupName": "sg-28lzv8xbm", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-08-15T08:49:40Z", 
+        "Description": "auto create.", 
+        "SecurityGroupId": "sg-283x5ecrg", 
+        "SecurityGroupName": "sg-283x5ecrg", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-05-23T09:40:30Z", 
+        "Description": "Test-API-3", 
+        "SecurityGroupId": "G9019bb74-50f0-4fa9-91f6-2f77f2aa12c5", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-05-06T04:23:20Z", 
+        "Description": "imagepublishgroup", 
+        "SecurityGroupId": "G052d3d93-af28-42d9-ace1-08c7e7e46038", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-04-04T04:35:29Z", 
+        "Description": "Test-API", 
+        "SecurityGroupId": "G69d5027e-85e4-45cb-a6a5-c1a4de77fab8", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-04-03T12:56:22Z", 
+        "Description": "this is qilu test", 
+        "SecurityGroupId": "G99573993-350d-4851-bf87-46ffc4eb78b4", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-03-27T07:55:35Z", 
+        "Description": "qq二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十", 
+        "SecurityGroupId": "Ga32fe869-9b2c-47f4-829d-7fccb202ae58", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-03-27T07:54:46Z", 
+        "Description": "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十", 
+        "SecurityGroupId": "Gf98fbc78-6c5f-40a8-b56a-e811a8965b42", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }, 
+      {
+        "CreationTime": "2014-03-27T07:48:10Z", 
+        "Description": "yankuangroup401", 
+        "SecurityGroupId": "Gb63c85c0-916e-4c2b-837f-619ba77397cd", 
+        "SecurityGroupName": "", 
+        "VpcId": ""
+      }
+    ]
+  }, 
+  "TotalCount": 19
+}
+
+
+
+
+
+
+
+5 撤销安全组规则
+python ecs.py RevokeSecurityGroup --SecurityGroupId=  --RegionId=cn-qingdao --IpProtocol= --PortRange=
+
+
+6 删除安全组
+python ecs.py DeleteSecurityGroup
+
+
+
+地域相关接口
++++++++++++++++++++++++++++++++++++++++++++++++
+1 查询可用地域列表
+python ecs.py DescribeRegions
+{
+  "Regions": {
+    "Region": [
+      {
+        "LocalName": "深圳", 
+        "RegionId": "cn-shenzhen"
+      }, 
+      {
+        "LocalName": "青岛", 
+        "RegionId": "cn-qingdao"
+      }, 
+      {
+        "LocalName": "北京", 
+        "RegionId": "cn-beijing"
+      }, 
+      {
+        "LocalName": "香港", 
+        "RegionId": "cn-hongkong"
+      }, 
+      {
+        "LocalName": "杭州", 
+        "RegionId": "cn-hangzhou"
+      }
+    ]
+  }, 
+  "RequestId": "709EAE4C-245D-4E60-82E1-C3BB40780E68"
+}
+
+2 查询可用区
+python ecs.py DescribeZones --RegionId=cn-qingdao
+{
+  "RequestId": "A2E864D8-8986-4300-895B-D6D48DC05EB8", 
+  "Zones": {
+    "Zone": [
+      {
+        "AvailableDiskCategories": {
+          "DiskCategories": [
+            "ephemeral", 
+            "cloud"
+          ]
+        }, 
+        "AvailableResourceCreation": {
+          "ResourceTypes": [
+            "Instance", 
+            "Disk"
+          ]
+        }, 
+        "LocalName": "青岛可用区B", 
+        "ZoneId": "cn-qingdao-b"
+      }
+    ]
+  }
+}
+
+
+
+监控相关接口
++++++++++++++++++++++++++++++++++++++++++++++++
+1 查看云服务器实例的监控信息   时间太早会爆出信息太早的提示，时间控制在当天
+python ecs.py DescribeInstanceMonitorData --InstanceId=i-28mwdh7kl --StartTime=2014-09-07T16:40:00Z --EndTime=2014-09-07T16:43:00Z
+{
+  "MonitorData": {
+    "InstanceMonitorData": [
+      {
+        "InstanceId": "i-28mwdh7kl",
+        "TimeStamp": "1410079260000"
+      },
+      {
+        "InstanceId": "i-28mwdh7kl",
+        "TimeStamp": "1410079200000"
+      }
+    ]
+  },
+  "RequestId": "F47E3714-B24D-457E-A92E-B243B475D2D2"
+}
+
+
+
+
+其他接口
++++++++++++++++++++++++++++++++++++++++++++++++
+1 查询实例资源规格列表
+python ecs.py DescribeInstanceTypes
+
+{
+  "InstanceTypes": {
+    "InstanceType": [
+      {
+        "CpuCoreCount": 1, 
+        "InstanceTypeId": "ecs.t1.xsmall", 
+        "MemorySize": 0.5
+      }, 
+      {
+        "CpuCoreCount": 1, 
+        "InstanceTypeId": "ecs.t1.small", 
+        "MemorySize": 1.0
+      }, 
+      {
+        "CpuCoreCount": 1, 
+        "InstanceTypeId": "ecs.s1.small", 
+        "MemorySize": 2.0
+      }, 
+      {
+        "CpuCoreCount": 1, 
+        "InstanceTypeId": "ecs.s1.medium", 
+        "MemorySize": 4.0
+      }, 
+      {
+        "CpuCoreCount": 2, 
+        "InstanceTypeId": "ecs.s2.small", 
+        "MemorySize": 2.0
+      }, 
+      {
+        "CpuCoreCount": 2, 
+        "InstanceTypeId": "ecs.s2.large", 
+        "MemorySize": 4.0
+      }, 
+      {
+        "CpuCoreCount": 2, 
+        "InstanceTypeId": "ecs.s2.xlarge", 
+        "MemorySize": 8.0
+      }, 
+      {
+        "CpuCoreCount": 4, 
+        "InstanceTypeId": "ecs.s3.medium", 
+        "MemorySize": 4.0
+      }, 
+      {
+        "CpuCoreCount": 4, 
+        "InstanceTypeId": "ecs.s3.large", 
+        "MemorySize": 8.0
+      }, 
+      {
+        "CpuCoreCount": 4, 
+        "InstanceTypeId": "ecs.m1.medium", 
+        "MemorySize": 16.0
+      }, 
+      {
+        "CpuCoreCount": 8, 
+        "InstanceTypeId": "ecs.m1.xlarge", 
+        "MemorySize": 32.0
+      }, 
+      {
+        "CpuCoreCount": 8, 
+        "InstanceTypeId": "ecs.c1.small", 
+        "MemorySize": 8.0
+      }, 
+      {
+        "CpuCoreCount": 8, 
+        "InstanceTypeId": "ecs.c1.large", 
+        "MemorySize": 16.0
+      }, 
+      {
+        "CpuCoreCount": 16, 
+        "InstanceTypeId": "ecs.c2.xlarge", 
+        "MemorySize": 64.0
+      }
+    ]
+  }, 
+  "RequestId": "6582A46B-1DA0-465D-867C-A0EFEE601B13"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+12.创建安全组:
+python ecs.py CreateSecurityGroup --Description="this is TEST-description" --RegionId=cn-shenzhen
+
+
+DescribeInstanceAttribute
+
+
+4.创建安全组：  已经超过安全组配额了
+python ecs.py CreateSecurityGroup --RegionId=cn-shenzhen --Description="this is TEST-description"
+
+
+
+
+
+
+
